@@ -23,20 +23,5 @@ namespace StandUpDeveloperPicker.Core.Implementations
 
             return responseData ?? new List<Character>();
         }
-
-        public async Task<Dictionary<Character, string>> CreateCharacterDeveloperPairs(List<string> developerNames)
-        {
-            var characters = await GetCharacters();
-            var characterDeveloperPairs = new Dictionary<Character, string>();
-            var shuffledIndices = Enumerable.Range(0, characters.Count).OrderBy(i => _random.Next()).ToList();
-            
-            foreach (var developerName in developerNames)
-            {
-                characterDeveloperPairs.Add(characters[shuffledIndices[0]], developerName);
-                shuffledIndices.RemoveAt(0);
-            }
-
-            return characterDeveloperPairs;
-        }
     }
 }

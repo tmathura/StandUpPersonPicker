@@ -2,7 +2,7 @@
 
 namespace StandUpDeveloperPicker.Core.Interfaces;
 
-public interface ICharacterBl
+public interface IDeveloperBl
 {
-    Task<List<Character>> GetCharacters();
+    Task<Dictionary<Character, string>> CreateCharacterDeveloperPairs();
 }
