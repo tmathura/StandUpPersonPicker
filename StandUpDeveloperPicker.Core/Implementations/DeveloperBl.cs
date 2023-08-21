@@ -10,6 +10,8 @@ namespace StandUpDeveloperPicker.Core.Implementations
         private readonly ICharacterBl _characterBl;
         private readonly Random _random = new();
         private List<string> DeveloperNames { get; }
+        public int DeveloperCount { get; }
+        private Dictionary<Character, string> CharacterDeveloperPairs { get; }
 
         public DeveloperBl(ICharacterBl characterBl, IConfigurationRoot configuration)
         {
@@ -19,21 +21,19 @@ namespace StandUpDeveloperPicker.Core.Implementations
             _characterBl = characterBl;
 
             DeveloperNames = settings.DeveloperNames;
+            DeveloperCount = DeveloperNames.Count;
+
+            CharacterDeveloperPairs = CreateCharacterDeveloperPairs();
         }
         
-        public async Task<Dictionary<Character, string>> CreateCharacterDeveloperPairs()
+        private Dictionary<Character, string> CreateCharacterDeveloperPairs()
         {
-            var characters = await _characterBl.GetCharacters();
+            var characters = _characterBl.GetCharacters().Result;
             var characterDeveloperPairs = new Dictionary<Character, string>();
             var shuffledIndices = Enumerable.Range(0, characters.Count).OrderBy(i => _random.Next()).ToList();
             var shuffledDevelopersIndices = Enumerable.Range(0, DeveloperNames.Count).OrderBy(i => _random.Next()).ToList();
 
-            var shuffledDeveloper = new List<string>();
-
-            for (var index = 0; index < shuffledDevelopersIndices.Count; index++)
-            {
-                shuffledDeveloper.Add(DeveloperNames[shuffledDevelopersIndices[index]]);
-            }
+            var shuffledDeveloper = shuffledDevelopersIndices.Select(index => DeveloperNames[index]).ToList();
 
             foreach (var developerName in shuffledDeveloper)
             {
@@ -42,6 +42,23 @@ namespace StandUpDeveloperPicker.Core.Implementations
             }
 
             return characterDeveloperPairs;
+        }
+
+        public DeveloperResponse GetDeveloperByIndex(int index)
+        {
+            var developerResponse = new DeveloperResponse();
+
+            if (index < 0 || index > CharacterDeveloperPairs.Count)
+            {
+                developerResponse.Errors.Add("Index not valid!");
+            }
+            else
+            {
+                developerResponse.Character = CharacterDeveloperPairs.ElementAt(index).Key;
+                developerResponse.Name = CharacterDeveloperPairs.ElementAt(index).Value;
+            }
+
+            return developerResponse;
         }
     }
 }

@@ -4,8 +4,8 @@ using RestSharp;
 using StandUpDeveloperPicker.Core.Implementations;
 using StandUpDeveloperPicker.Core.Interfaces;
 using StandUpDeveloperPicker.Domain.Models;
-using System;
 
+var index = 0;
 var settings = new Settings();
 var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 configuration.Bind(settings);
@@ -24,18 +24,18 @@ if (developerBl == null)
     throw new ArgumentNullException(nameof(developerBl));
 }
 
-var characterDeveloperPairs = await developerBl.CreateCharacterDeveloperPairs();
-
 Console.WriteLine("Welcome to daily stand ups.");
 
-foreach (var characterDeveloperPair in characterDeveloperPairs)
+while (index < developerBl.DeveloperCount)
 {
+    var developerResponse = developerBl.GetDeveloperByIndex(index);
     Console.ForegroundColor = GetRandomConsoleColor();
-    Console.WriteLine($"The current person to speak is '{characterDeveloperPair.Value}' and their character is '{characterDeveloperPair.Key.Name}'.");
+    Console.WriteLine($"The current person to speak is '{developerResponse.Name}' and their character is '{developerResponse.Character.Name}'.");
     Console.WriteLine("Press enter to show the next person.");
     Console.ReadLine();
-}
 
+    index++;
+}
 
 return;
 
