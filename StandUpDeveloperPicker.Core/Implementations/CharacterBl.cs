@@ -8,7 +8,7 @@ namespace StandUpDeveloperPicker.Core.Implementations
     public class CharacterBl : ICharacterBl
     {
         private readonly IRestClient _restClient;
-        private readonly Random _random = new();
+        private readonly int _maxNumberOfCharactersPages = 42;
 
         public CharacterBl(IRestClient restClient)
         {
@@ -17,11 +17,19 @@ namespace StandUpDeveloperPicker.Core.Implementations
 
         public async Task<List<Character>> GetCharacters()
         {
-            var restRequest = new RestRequest("character");
-            var response = await _restClient.ExecuteGetAsync<CharacterResponse>(restRequest);
-            var responseData = response.Data?.Results;
+            var characters = new List<Character>();
 
-            return responseData ?? new List<Character>();
+            for (var pageIndex = 0; pageIndex < _maxNumberOfCharactersPages; pageIndex++)
+            {
+                var restRequest = new RestRequest($"character?page={pageIndex}");
+                var response = await _restClient.ExecuteGetAsync<CharacterResponse>(restRequest);
+                if (response.Data?.Results != null)
+                {
+                    characters.AddRange(response.Data.Results);
+                }
+            }
+
+            return characters;
         }
     }
 }
