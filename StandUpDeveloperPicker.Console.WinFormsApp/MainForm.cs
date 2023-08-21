@@ -31,7 +31,7 @@ namespace StandUpDeveloperPicker.Console.WinFormsApp
                 lblResult.Text = $"The current person to speak is '{developerResponse.Name}' and their character is '{developerResponse.Character.Name}'.";
                 pbResult.ImageLocation = developerResponse.Character.Image;
             }
-            
+
             btnPrevious.Enabled = !(Index <= 0);
             btnNext.Enabled = Index < _developerBl.DeveloperCount - 1;
         }

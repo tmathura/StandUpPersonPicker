@@ -37,24 +37,28 @@
             // 
             // lblResult
             // 
-            lblResult.AutoSize = true;
-            lblResult.Location = new Point(214, 68);
+            lblResult.Dock = DockStyle.Top;
+            lblResult.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            lblResult.Location = new Point(0, 0);
             lblResult.Name = "lblResult";
-            lblResult.Size = new Size(53, 15);
+            lblResult.Size = new Size(800, 83);
             lblResult.TabIndex = 0;
             lblResult.Text = "Results...";
+            lblResult.TextAlign = ContentAlignment.TopCenter;
             // 
             // pbResult
             // 
-            pbResult.Location = new Point(214, 135);
+            pbResult.Dock = DockStyle.Fill;
+            pbResult.Location = new Point(0, 83);
             pbResult.Name = "pbResult";
-            pbResult.Size = new Size(300, 300);
+            pbResult.Size = new Size(800, 367);
+            pbResult.SizeMode = PictureBoxSizeMode.CenterImage;
             pbResult.TabIndex = 1;
             pbResult.TabStop = false;
             // 
             // btnPrevious
             // 
-            btnPrevious.Location = new Point(625, 157);
+            btnPrevious.Location = new Point(636, 222);
             btnPrevious.Name = "btnPrevious";
             btnPrevious.Size = new Size(75, 23);
             btnPrevious.TabIndex = 2;
@@ -64,7 +68,7 @@
             // 
             // btnNext
             // 
-            btnNext.Location = new Point(625, 199);
+            btnNext.Location = new Point(636, 264);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(75, 23);
             btnNext.TabIndex = 3;
@@ -85,7 +89,6 @@
             Text = "Stand Up Developer Picker";
             ((System.ComponentModel.ISupportInitialize)pbResult).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
