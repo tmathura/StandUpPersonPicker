@@ -1,8 +1,8 @@
-﻿using StandUpDeveloperPicker.Domain.Models.RickAndMorty;
+﻿using StandUpPersonPicker.Domain.Models.RickAndMorty;
 
-namespace StandUpDeveloperPicker.Domain.Models
+namespace StandUpPersonPicker.Domain.Models
 {
-    public class DeveloperResponse
+    public class PersonResponse
     {
         public string Name { get; set; }
         public Character Character { get; set; }

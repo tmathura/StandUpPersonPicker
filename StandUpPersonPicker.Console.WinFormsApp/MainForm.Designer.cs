@@ -1,4 +1,4 @@
-﻿namespace StandUpDeveloperPicker.Console.WinFormsApp
+﻿namespace StandUpPersonPicker.Console.WinFormsApp
 {
     partial class MainForm
     {
@@ -32,10 +32,10 @@
             pbResult = new PictureBox();
             btnPrevious = new Button();
             btnNext = new Button();
-            clbDevelopers = new CheckedListBox();
+            clbPersons = new CheckedListBox();
             btnStart = new Button();
-            txtDeveloperName = new TextBox();
-            btnAddDeveloper = new Button();
+            txtPersonName = new TextBox();
+            btnAddPerson = new Button();
             ((System.ComponentModel.ISupportInitialize)pbResult).BeginInit();
             SuspendLayout();
             // 
@@ -80,13 +80,13 @@
             btnNext.UseVisualStyleBackColor = true;
             btnNext.Click += BtnNext_Click;
             // 
-            // clbDevelopers
+            // clbPersons
             // 
-            clbDevelopers.FormattingEnabled = true;
-            clbDevelopers.Location = new Point(12, 137);
-            clbDevelopers.Name = "clbDevelopers";
-            clbDevelopers.Size = new Size(186, 292);
-            clbDevelopers.TabIndex = 4;
+            clbPersons.FormattingEnabled = true;
+            clbPersons.Location = new Point(12, 137);
+            clbPersons.Name = "clbPersons";
+            clbPersons.Size = new Size(186, 292);
+            clbPersons.TabIndex = 4;
             // 
             // btnStart
             // 
@@ -98,38 +98,38 @@
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += BtnStart_Click;
             // 
-            // txtDeveloperName
+            // txtPersonName
             // 
-            txtDeveloperName.Location = new Point(12, 108);
-            txtDeveloperName.Name = "txtDeveloperName";
-            txtDeveloperName.Size = new Size(140, 23);
-            txtDeveloperName.TabIndex = 6;
+            txtPersonName.Location = new Point(12, 108);
+            txtPersonName.Name = "txtPersonName";
+            txtPersonName.Size = new Size(140, 23);
+            txtPersonName.TabIndex = 6;
             // 
-            // btnAddDeveloper
+            // btnAddPerson
             // 
-            btnAddDeveloper.Location = new Point(158, 108);
-            btnAddDeveloper.Name = "btnAddDeveloper";
-            btnAddDeveloper.Size = new Size(40, 23);
-            btnAddDeveloper.TabIndex = 7;
-            btnAddDeveloper.Text = "Add";
-            btnAddDeveloper.UseVisualStyleBackColor = true;
-            btnAddDeveloper.Click += BtnAddDeveloper_Click;
+            btnAddPerson.Location = new Point(158, 108);
+            btnAddPerson.Name = "btnAddPerson";
+            btnAddPerson.Size = new Size(40, 23);
+            btnAddPerson.TabIndex = 7;
+            btnAddPerson.Text = "Add";
+            btnAddPerson.UseVisualStyleBackColor = true;
+            btnAddPerson.Click += BtnAddPerson_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnAddDeveloper);
-            Controls.Add(txtDeveloperName);
+            Controls.Add(btnAddPerson);
+            Controls.Add(txtPersonName);
             Controls.Add(btnStart);
-            Controls.Add(clbDevelopers);
+            Controls.Add(clbPersons);
             Controls.Add(btnNext);
             Controls.Add(btnPrevious);
             Controls.Add(pbResult);
             Controls.Add(lblResult);
             Name = "MainForm";
-            Text = "Stand Up Developer Picker";
+            Text = "Stand Up Person Picker";
             ((System.ComponentModel.ISupportInitialize)pbResult).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -141,9 +141,9 @@
         private PictureBox pbResult;
         private Button btnPrevious;
         private Button btnNext;
-        private CheckedListBox clbDevelopers;
+        private CheckedListBox clbPersons;
         private Button btnStart;
-        private TextBox txtDeveloperName;
-        private Button btnAddDeveloper;
+        private TextBox txtPersonName;
+        private Button btnAddPerson;
     }
 }

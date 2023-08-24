@@ -1,4 +1,4 @@
-﻿namespace StandUpDeveloperPicker.Domain.Models.RickAndMorty
+﻿namespace StandUpPersonPicker.Domain.Models.RickAndMorty
 {
     public class Character
     {

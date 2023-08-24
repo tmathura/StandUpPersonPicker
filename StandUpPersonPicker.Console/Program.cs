@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestSharp;
-using StandUpDeveloperPicker.Core.Implementations;
-using StandUpDeveloperPicker.Core.Interfaces;
-using StandUpDeveloperPicker.Domain.Models;
+using StandUpPersonPicker.Core.Implementations;
+using StandUpPersonPicker.Core.Interfaces;
+using StandUpPersonPicker.Domain.Models;
 
 var index = 0;
 var settings = new Settings();
@@ -14,27 +14,27 @@ var serviceProvider = new ServiceCollection()
     .AddSingleton<IConfigurationRoot, ConfigurationRoot>(_ => (ConfigurationRoot)configuration)
     .AddSingleton<IRestClient, RestClient>(_ => new RestClient(settings.ApiBaseUrl))
     .AddSingleton<ICharacterBl, CharacterBl>()
-    .AddSingleton<IDeveloperBl, DeveloperBl>()
+    .AddSingleton<IPersonBl, PersonBl>()
     .BuildServiceProvider();
 
-var developerBl = serviceProvider.GetService<IDeveloperBl>();
+var personBl = serviceProvider.GetService<IPersonBl>();
 
-if (developerBl == null)
+if (personBl == null)
 {
-    throw new ArgumentNullException(nameof(developerBl));
+    throw new ArgumentNullException(nameof(personBl));
 }
 
-var developerNames = settings.DeveloperNames;
+var personNames = settings.PersonNames;
 
-await developerBl.CreateCharacterDeveloperPairs(developerNames);
+await personBl.CreateCharacterPersonPairs(personNames);
 
 Console.WriteLine("Welcome to daily stand ups.");
 
-while (index < developerNames.Count)
+while (index < personNames.Count)
 {
-    var developerResponse = developerBl.GetDeveloperByIndex(index);
+    var personResponse = personBl.GetPersonByIndex(index);
     Console.ForegroundColor = GetRandomConsoleColor();
-    Console.WriteLine($"The current person to speak is '{developerResponse.Name}' and their character is '{developerResponse.Character.Name}'.");
+    Console.WriteLine($"The current person to speak is '{personResponse.Name}' and their character is '{personResponse.Character.Name}'.");
     Console.WriteLine("Press enter to show the next person.");
     Console.ReadLine();
 

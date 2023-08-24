@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestSharp;
-using StandUpDeveloperPicker.Core.Implementations;
-using StandUpDeveloperPicker.Core.Interfaces;
-using StandUpDeveloperPicker.Domain.Models;
+using StandUpPersonPicker.Core.Implementations;
+using StandUpPersonPicker.Core.Interfaces;
+using StandUpPersonPicker.Domain.Models;
 
-namespace StandUpDeveloperPicker.Console.WinFormsApp
+namespace StandUpPersonPicker.Console.WinFormsApp
 {
     internal static class Program
     {
@@ -24,14 +24,14 @@ namespace StandUpDeveloperPicker.Console.WinFormsApp
                 .AddSingleton<IConfigurationRoot, ConfigurationRoot>(_ => (ConfigurationRoot)configuration)
                 .AddSingleton<IRestClient, RestClient>(_ => new RestClient(settings.ApiBaseUrl))
                 .AddSingleton<ICharacterBl, CharacterBl>()
-                .AddSingleton<IDeveloperBl, DeveloperBl>()
+                .AddSingleton<IPersonBl, PersonBl>()
                 .BuildServiceProvider();
 
-            var developerBl = serviceProvider.GetService<IDeveloperBl>();
+            var personBl = serviceProvider.GetService<IPersonBl>();
 
-            if (developerBl == null)
+            if (personBl == null)
             {
-                throw new ArgumentNullException(nameof(developerBl));
+                throw new ArgumentNullException(nameof(personBl));
             }
 
             var configurationRoot = serviceProvider.GetService<IConfigurationRoot>();
@@ -42,7 +42,7 @@ namespace StandUpDeveloperPicker.Console.WinFormsApp
             }
 
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm(developerBl, configurationRoot));
+            Application.Run(new MainForm(personBl, configurationRoot));
             return Task.CompletedTask;
         }
     }

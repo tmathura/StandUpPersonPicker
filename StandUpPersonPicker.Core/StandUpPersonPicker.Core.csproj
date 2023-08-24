@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StandUpDeveloperPicker.Domain\StandUpDeveloperPicker.Domain.csproj" />
+    <ProjectReference Include="..\StandUpPersonPicker.Domain\StandUpPersonPicker.Domain.csproj" />
   </ItemGroup>
 
 </Project>

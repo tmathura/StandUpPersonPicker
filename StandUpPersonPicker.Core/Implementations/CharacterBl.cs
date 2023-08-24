@@ -1,9 +1,9 @@
 ﻿using RestSharp;
-using StandUpDeveloperPicker.Core.Interfaces;
-using StandUpDeveloperPicker.Domain.Models;
-using StandUpDeveloperPicker.Domain.Models.RickAndMorty;
+using StandUpPersonPicker.Core.Interfaces;
+using StandUpPersonPicker.Domain.Models;
+using StandUpPersonPicker.Domain.Models.RickAndMorty;
 
-namespace StandUpDeveloperPicker.Core.Implementations
+namespace StandUpPersonPicker.Core.Implementations
 {
     public class CharacterBl : ICharacterBl
     {
