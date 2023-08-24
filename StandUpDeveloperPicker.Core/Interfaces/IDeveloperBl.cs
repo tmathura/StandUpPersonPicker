@@ -4,6 +4,6 @@ namespace StandUpDeveloperPicker.Core.Interfaces;
 
 public interface IDeveloperBl
 {
-    int DeveloperCount { get; }
     DeveloperResponse GetDeveloperByIndex(int index);
+    Task CreateCharacterDeveloperPairs(List<string> developerNames);
 }

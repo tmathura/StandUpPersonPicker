@@ -32,6 +32,10 @@
             pbResult = new PictureBox();
             btnPrevious = new Button();
             btnNext = new Button();
+            clbDevelopers = new CheckedListBox();
+            btnStart = new Button();
+            txtDeveloperName = new TextBox();
+            btnAddDeveloper = new Button();
             ((System.ComponentModel.ISupportInitialize)pbResult).BeginInit();
             SuspendLayout();
             // 
@@ -64,7 +68,7 @@
             btnPrevious.TabIndex = 2;
             btnPrevious.Text = "Previous";
             btnPrevious.UseVisualStyleBackColor = true;
-            btnPrevious.Click += btnPrevious_Click;
+            btnPrevious.Click += BtnPrevious_Click;
             // 
             // btnNext
             // 
@@ -74,13 +78,52 @@
             btnNext.TabIndex = 3;
             btnNext.Text = "Next";
             btnNext.UseVisualStyleBackColor = true;
-            btnNext.Click += btnNext_Click;
+            btnNext.Click += BtnNext_Click;
+            // 
+            // clbDevelopers
+            // 
+            clbDevelopers.FormattingEnabled = true;
+            clbDevelopers.Location = new Point(12, 137);
+            clbDevelopers.Name = "clbDevelopers";
+            clbDevelopers.Size = new Size(186, 292);
+            clbDevelopers.TabIndex = 4;
+            // 
+            // btnStart
+            // 
+            btnStart.Location = new Point(636, 180);
+            btnStart.Name = "btnStart";
+            btnStart.Size = new Size(75, 23);
+            btnStart.TabIndex = 5;
+            btnStart.Text = "Start";
+            btnStart.UseVisualStyleBackColor = true;
+            btnStart.Click += BtnStart_Click;
+            // 
+            // txtDeveloperName
+            // 
+            txtDeveloperName.Location = new Point(12, 108);
+            txtDeveloperName.Name = "txtDeveloperName";
+            txtDeveloperName.Size = new Size(140, 23);
+            txtDeveloperName.TabIndex = 6;
+            // 
+            // btnAddDeveloper
+            // 
+            btnAddDeveloper.Location = new Point(158, 108);
+            btnAddDeveloper.Name = "btnAddDeveloper";
+            btnAddDeveloper.Size = new Size(40, 23);
+            btnAddDeveloper.TabIndex = 7;
+            btnAddDeveloper.Text = "Add";
+            btnAddDeveloper.UseVisualStyleBackColor = true;
+            btnAddDeveloper.Click += BtnAddDeveloper_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnAddDeveloper);
+            Controls.Add(txtDeveloperName);
+            Controls.Add(btnStart);
+            Controls.Add(clbDevelopers);
             Controls.Add(btnNext);
             Controls.Add(btnPrevious);
             Controls.Add(pbResult);
@@ -89,6 +132,7 @@
             Text = "Stand Up Developer Picker";
             ((System.ComponentModel.ISupportInitialize)pbResult).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -97,5 +141,9 @@
         private PictureBox pbResult;
         private Button btnPrevious;
         private Button btnNext;
+        private CheckedListBox clbDevelopers;
+        private Button btnStart;
+        private TextBox txtDeveloperName;
+        private Button btnAddDeveloper;
     }
 }

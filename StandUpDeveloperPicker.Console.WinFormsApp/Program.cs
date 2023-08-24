@@ -13,7 +13,7 @@ namespace StandUpDeveloperPicker.Console.WinFormsApp
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static async Task Main()
+        static Task Main()
         {
 
             var settings = new Settings();
@@ -33,9 +33,17 @@ namespace StandUpDeveloperPicker.Console.WinFormsApp
             {
                 throw new ArgumentNullException(nameof(developerBl));
             }
-            
+
+            var configurationRoot = serviceProvider.GetService<IConfigurationRoot>();
+
+            if (configurationRoot == null)
+            {
+                throw new ArgumentNullException(nameof(configurationRoot));
+            }
+
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm(developerBl));
+            Application.Run(new MainForm(developerBl, configurationRoot));
+            return Task.CompletedTask;
         }
     }
 }

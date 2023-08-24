@@ -24,9 +24,13 @@ if (developerBl == null)
     throw new ArgumentNullException(nameof(developerBl));
 }
 
+var developerNames = settings.DeveloperNames;
+
+await developerBl.CreateCharacterDeveloperPairs(developerNames);
+
 Console.WriteLine("Welcome to daily stand ups.");
 
-while (index < developerBl.DeveloperCount)
+while (index < developerNames.Count)
 {
     var developerResponse = developerBl.GetDeveloperByIndex(index);
     Console.ForegroundColor = GetRandomConsoleColor();

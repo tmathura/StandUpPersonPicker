@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using StandUpDeveloperPicker.Core.Interfaces;
+﻿using StandUpDeveloperPicker.Core.Interfaces;
 using StandUpDeveloperPicker.Domain.Models;
 using StandUpDeveloperPicker.Domain.Models.RickAndMorty;
 
@@ -9,31 +8,22 @@ namespace StandUpDeveloperPicker.Core.Implementations
     {
         private readonly ICharacterBl _characterBl;
         private readonly Random _random = new();
-        private List<string> DeveloperNames { get; }
-        public int DeveloperCount { get; }
-        private Dictionary<Character, string> CharacterDeveloperPairs { get; }
 
-        public DeveloperBl(ICharacterBl characterBl, IConfigurationRoot configuration)
+        private Dictionary<Character, string> CharacterDeveloperPairs { get; set; } = new();
+
+        public DeveloperBl(ICharacterBl characterBl)
         {
-            var settings = new Settings();
-            configuration.Bind(settings);
-
             _characterBl = characterBl;
-
-            DeveloperNames = settings.DeveloperNames;
-            DeveloperCount = DeveloperNames.Count;
-
-            CharacterDeveloperPairs = CreateCharacterDeveloperPairs();
         }
         
-        private Dictionary<Character, string> CreateCharacterDeveloperPairs()
+        public async Task CreateCharacterDeveloperPairs(List<string> developerNames)
         {
-            var characters = _characterBl.GetCharacters().Result;
+            var characters = await _characterBl.GetCharacters();
             var characterDeveloperPairs = new Dictionary<Character, string>();
             var shuffledIndices = Enumerable.Range(0, characters.Count).OrderBy(i => _random.Next()).ToList();
-            var shuffledDevelopersIndices = Enumerable.Range(0, DeveloperNames.Count).OrderBy(i => _random.Next()).ToList();
+            var shuffledDevelopersIndices = Enumerable.Range(0, developerNames.Count).OrderBy(i => _random.Next()).ToList();
 
-            var shuffledDeveloper = shuffledDevelopersIndices.Select(index => DeveloperNames[index]).ToList();
+            var shuffledDeveloper = shuffledDevelopersIndices.Select(index => developerNames[index]).ToList();
 
             foreach (var developerName in shuffledDeveloper)
             {
@@ -41,7 +31,7 @@ namespace StandUpDeveloperPicker.Core.Implementations
                 shuffledIndices.RemoveAt(0);
             }
 
-            return characterDeveloperPairs;
+            CharacterDeveloperPairs = characterDeveloperPairs;
         }
 
         public DeveloperResponse GetDeveloperByIndex(int index)
