@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StandUpPersonPicker.Core.Interfaces;
+using StandUpPersonPicker.Domain.Models;
 using StandUpPersonPicker.WebApp.Models;
 using System.Diagnostics;
-using StandUpPersonPicker.Domain.Models;
-using System.Text.Json;
-using StandUpPersonPicker.Core.Interfaces;
 
 namespace StandUpPersonPicker.WebApp.Controllers
 {
@@ -46,6 +45,14 @@ namespace StandUpPersonPicker.WebApp.Controllers
 
         public async Task<IActionResult> Start(HomeViewModel viewModel)
         {
+
+            if (viewModel.SelectedPeople == null || viewModel.SelectedPeople.Count == 0)
+            {
+                ModelState.AddModelError("people-count-error", "No one added to start the stand up!");
+                
+                return View("Index", viewModel);
+            }
+
             // Save SelectedPeople to cookies
             var cookieOptions = new CookieOptions
             {

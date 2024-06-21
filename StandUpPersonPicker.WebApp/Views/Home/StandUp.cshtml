@@ -16,11 +16,29 @@
 
             if (index + 1 > maxIndex) {
                 document.getElementById('btnNext').disabled = true;
+                document.getElementById('btnPrevious').disabled = true;
                 document.getElementById('all-done').style.display = '';
                 document.getElementById('btnNext').style.display = 'none';
+                document.getElementById('btnPrevious').style.display = 'none';
 
             } else {
                 document.getElementById('person-' + index).style.display = '';
+                document.getElementById('btnPrevious').disabled = false;
+            }
+        }
+
+        function previousPerson() {
+            document.getElementById('person-' + index).style.display = 'none';
+
+            index--;
+
+            if (index + 1 == 1) {
+                document.getElementById('person-' + index).style.display = '';
+                document.getElementById('btnPrevious').disabled = true;
+
+            } else {
+                document.getElementById('person-' + index).style.display = '';
+                document.getElementById('btnPrevious').disabled = false;
             }
         }
     </script>
@@ -30,8 +48,8 @@
 <div class="container">
     <div id="all-done" class="row justify-content-center align-items-center mt-2" style="display:none">
         <div class="col-md-6">
-            <div class="alert alert-danger" role="alert">
-                All done!
+            <div class="alert alert-success" role="alert">
+                🙌🏻 YAY!! All done!
             </div>
         </div>
     </div>
@@ -42,7 +60,7 @@
         <div id="person-@i" class="row justify-content-center align-items-center" @(i == 0 ? "style=" : "style=display:none")>
             <div class="col-md-6">
                 <div class="row">
-                    <p>The current person to speak is '@person.Name' and their character is '@person.CharacterName'.</p>
+                    <p class="h6">The current person to speak is '@person.Name' and their character is '@person.CharacterName'.</p>
                 </div>
                 <div class="row">
                     <img src="@person.CharacterImageUrl" alt="Image" style="width: auto; height: auto;">
@@ -52,6 +70,9 @@
     }
     <div class="row justify-content-center align-items-center mt-2">
         <div class="col-md-6">
+            <button id="btnPrevious" type="submit" class="btn btn-primary" onclick="previousPerson();" disabled>
+                Previous
+            </button>
             <button id="btnNext" type="submit" class="btn btn-primary" onclick="nextPerson();">
                 Next
             </button>

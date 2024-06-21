@@ -33,11 +33,25 @@
             var newPerson = document.createElement("div");
             newPerson.className = "checkbox";
             newPerson.innerHTML = `
-                <label>
-                    <input type="checkbox" value="${value}" checked="true" name="SelectedPeople" id="${value}" />
-                    ${value}
-                </label>
-            `;
+                        <label>
+                            <input type="checkbox" value="${value}" checked="true" name="SelectedPeople" id="${value}" />
+                            ${value}
+                        </label>
+                    `;
+            newPerson.innerHTML = `
+                        <div id="person-${value}">
+                            <input class="form-check-input h4" type="checkbox" value="${value}" checked="${value}" name="SelectedPeople" id="${value}" />
+                            <label class="form-check-label h4" for="${value}">
+                                ${value}
+                            </label>
+                            <button id="btnDeletePerson" type="submit" class="btn btn-outline-danger btn-sm" onclick="addDelete('person-${value}');">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    `;
 
             var selectedPeople = document.querySelectorAll('input[name="SelectedPeople"]');
             var selectedPeopleNames = Array.from(selectedPeople).map(function (person) {
@@ -50,6 +64,29 @@
             document.querySelector('input[name="AllPeopleNames"]').value = selectedPeopleNames.join(',');
 
             document.getElementById("people").appendChild(newPerson);
+
+            // Remove the 'no-people' div when adding a person
+            var noPeopleDiv = document.getElementById("no-people");
+            if (noPeopleDiv) {
+                noPeopleDiv.remove();
+            }
+
+        }
+
+        function addDelete(elementId) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var elementCheckbox = document.getElementById(elementId);
+            if (elementCheckbox) {
+                elementCheckbox.remove();
+
+                var selectedPeople = document.querySelectorAll('input[name="SelectedPeople"]');
+                var selectedPeopleNames = Array.from(selectedPeople).map(function (person) {
+                    return person.value;
+                });
+                document.querySelector('input[name="AllPeopleNames"]').value = selectedPeopleNames.join(',');
+            }
+
         }
     </script>
 }
@@ -58,18 +95,53 @@
     <div class="container">
         <!-- Hidden input field to store the list of people's names -->
         <input type="hidden" name="AllPeopleNames" value="@string.Join(',', Model.People.Select(x => x.Name))" />
-
-
+        <div class="row mt-2">
+            <div class="col">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach (var modelState in ViewData.ModelState)
+                            {
+                                foreach (var error in modelState.Value.Errors)
+                                {
+                                    <li>
+                                        <pre id="@modelState.Key">@error.ErrorMessage</pre>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
         <div id="people" class="row">
-            @foreach (var item in Model.People)
-            {
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="@item.Name" checked="@item.IsSelected" name="SelectedPeople" id="@item.Name" />
-                        @Html.Raw(@item.Name)
-                    </label>
-                </div>
-            }
+            <div class="col">
+                @if (Model.People.Count == 0)
+                {
+                    <div id="no-people" class="alert alert-danger" role="alert">
+                        No one added yet!
+                    </div>
+                }
+                else
+                {
+                    @foreach (var item in Model.People)
+                    {
+                        <div id="person-@item.Name">
+                            <input class="form-check-input h4" type="checkbox" value="@item.Name" checked="@item.IsSelected" name="SelectedPeople" id="@item.Name" />
+                            <label class="form-check-label h4" for="@item.Name">
+                                @Html.Raw(@item.Name)
+                            </label>
+                            <button id="btnDeletePerson" type="submit" class="btn btn-outline-danger btn-sm" onclick="addDelete('person-@item.Name');">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
         </div>
         <div class="row mt-2">
             <div class="col">
