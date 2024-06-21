@@ -1,0 +1,71 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- group: 'web-app'
+
+steps:
+
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      echo '$(SubscriptionId)'
+#      echo $(AppName)
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+#- task: VSTest@2
+#  inputs:
+#    platform: '$(buildPlatform)'
+#    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish and zip'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: StandUpPersonPicker.WebApp\StandUpPersonPicker.WebApp.csproj
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy Azure Web App'
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: $(SubscriptionId)
+    appType: 'webApp'
+    WebAppName: $(AppName)
+    deployToSlotOrASE: true
+    ResourceGroupName: $(ResourceGroupName)
+    SlotName: 'production'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    enableCustomDeployment: true
+    DeploymentType: 'zipDeploy'
+    JSONFiles: 'appsettings.json'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
