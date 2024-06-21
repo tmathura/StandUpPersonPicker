@@ -16,7 +16,7 @@ variables:
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
-- group: 'acdc-pipeline-group'
+- group: 'web-app'
 
 steps:
 
