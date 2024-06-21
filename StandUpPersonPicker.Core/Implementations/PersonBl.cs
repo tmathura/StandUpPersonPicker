@@ -16,7 +16,7 @@ namespace StandUpPersonPicker.Core.Implementations
             _characterBl = characterBl;
         }
         
-        public async Task CreateCharacterPersonPairs(List<string> personNames)
+        public async Task<Dictionary<Character, string>> CreateCharacterPersonPairs(List<string> personNames)
         {
             var characters = await _characterBl.GetCharacters();
             var characterPersonPairs = new Dictionary<Character, string>();
@@ -32,6 +32,8 @@ namespace StandUpPersonPicker.Core.Implementations
             }
 
             CharacterPersonPairs = characterPersonPairs;
+
+            return characterPersonPairs;
         }
 
         public PersonResponse GetPersonByIndex(int index)

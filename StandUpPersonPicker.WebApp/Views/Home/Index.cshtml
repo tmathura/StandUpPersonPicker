@@ -1,0 +1,86 @@
+﻿@model StandUpPersonPicker.Domain.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setRunnningState(false);
+        });
+
+        function setRunnningState(running) {
+            document.getElementById('btnStart').disabled = running;
+            document.getElementById('spnStart').style.display = running ? 'inline-block' : 'none';
+            document.getElementById('lblStart').innerText = running ? 'Running...' : 'Start';
+        }
+
+        function start() {
+            setRunnningState(true);
+            document.forms['Home'].submit();
+        }
+
+        function addPerson() {
+            event.preventDefault(); // Prevent the default form submission
+
+            var value = prompt("Enter a value:");
+
+            if (value === null) {
+                return; // Do nothing if the prompt is canceled
+            }
+
+            var newPerson = document.createElement("div");
+            newPerson.className = "checkbox";
+            newPerson.innerHTML = `
+                <label>
+                    <input type="checkbox" value="${value}" checked="true" name="SelectedPeople" id="${value}" />
+                    ${value}
+                </label>
+            `;
+
+            var selectedPeople = document.querySelectorAll('input[name="SelectedPeople"]');
+            var selectedPeopleNames = Array.from(selectedPeople).map(function (person) {
+                return person.value;
+            });
+
+            selectedPeopleNames.push(value); // Add newPerson to selectedPeopleNames
+
+            // Set the value of the hidden input field to the list of people's names
+            document.querySelector('input[name="AllPeopleNames"]').value = selectedPeopleNames.join(',');
+
+            document.getElementById("people").appendChild(newPerson);
+        }
+    </script>
+}
+
+<form name="Home" asp-action="Start" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <div class="container">
+        <!-- Hidden input field to store the list of people's names -->
+        <input type="hidden" name="AllPeopleNames" value="@string.Join(',', Model.People.Select(x => x.Name))" />
+
+
+        <div id="people" class="row">
+            @foreach (var item in Model.People)
+            {
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="@item.Name" checked="@item.IsSelected" name="SelectedPeople" id="@item.Name" />
+                        @Html.Raw(@item.Name)
+                    </label>
+                </div>
+            }
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <button id="btnAddPerson" type="submit" class="btn btn-primary" onclick="addPerson();">
+                    Add Person
+                </button>
+                <button id="btnStart" type="submit" class="btn btn-success" onclick="start();">
+                    <span id="spnStart" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+                    <label id="lblStart">Start</label>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

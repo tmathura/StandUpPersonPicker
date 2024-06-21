@@ -1,0 +1,60 @@
+﻿@model StandUpPersonPicker.Domain.Models.StandUpViewModel
+
+@{
+    ViewData["Title"] = "Stand Up";
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        var index = 0;
+        var maxIndex = @Model.StandUpPeople.Count;
+
+        function nextPerson() {
+            document.getElementById('person-' + index).style.display = 'none';
+
+            index++;
+
+            if (index + 1 > maxIndex) {
+                document.getElementById('btnNext').disabled = true;
+                document.getElementById('all-done').style.display = '';
+                document.getElementById('btnNext').style.display = 'none';
+
+            } else {
+                document.getElementById('person-' + index).style.display = '';
+            }
+        }
+    </script>
+}
+
+
+<div class="container">
+    <div id="all-done" class="row justify-content-center align-items-center mt-2" style="display:none">
+        <div class="col-md-6">
+            <div class="alert alert-danger" role="alert">
+                All done!
+            </div>
+        </div>
+    </div>
+    @for (var i = 0; i < Model.StandUpPeople.Count; i++)
+    {
+        var person = Model.StandUpPeople[i];
+
+        <div id="person-@i" class="row justify-content-center align-items-center" @(i == 0 ? "style=" : "style=display:none")>
+            <div class="col-md-6">
+                <div class="row">
+                    <p>The current person to speak is '@person.Name' and their character is '@person.CharacterName'.</p>
+                </div>
+                <div class="row">
+                    <img src="@person.CharacterImageUrl" alt="Image" style="width: auto; height: auto;">
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row justify-content-center align-items-center mt-2">
+        <div class="col-md-6">
+            <button id="btnNext" type="submit" class="btn btn-primary" onclick="nextPerson();">
+                Next
+            </button>
+        </div>
+    </div>
+</div>
