@@ -1,158 +1,189 @@
 ﻿@model StandUpPersonPicker.Domain.Models.HomeViewModel
 
 @{
-    ViewData["Title"] = "Home";
+	ViewData["Title"] = "Home";
 }
 
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            setRunnningState(false);
-        });
+	<script type="text/javascript">
+		$(document).ready(function () {
+			setRunnningState(false);
+		});
 
-        function setRunnningState(running) {
-            document.getElementById('btnStart').disabled = running;
-            document.getElementById('spnStart').style.display = running ? 'inline-block' : 'none';
-            document.getElementById('lblStart').innerText = running ? 'Running...' : 'Start';
-        }
+		function setRunnningState(running) {
+			document.getElementById('btnStart').disabled = running;
+			document.getElementById('spnStart').style.display = running ? '' : 'none';
+			document.getElementById('lblStart').innerText = running ? 'Running...' : 'Start';
+		}
 
-        function start() {
-            setRunnningState(true);
-            document.forms['Home'].submit();
-        }
+		function start() {
+			setRunnningState(true);
+			document.forms['Home'].submit();
+		}
 
-        function addPerson() {
-            event.preventDefault(); // Prevent the default form submission
+		function addPerson() {
+			event.preventDefault(); // Prevent the default form submission
 
-            var value = prompt("Enter a value:");
+			var personsNameElement = document.getElementById("personsName");
+			value = personsNameElement.value;
 
-            if (value === null) {
-                return; // Do nothing if the prompt is canceled
-            }
+			if (!value) {
+				alert("No name entered!")
+				return; // Do nothing if the prompt is canceled
+			}
 
-            var newPerson = document.createElement("div");
-            newPerson.className = "checkbox";
-            newPerson.innerHTML = `
-                        <label>
-                            <input type="checkbox" value="${value}" checked="true" name="SelectedPeople" id="${value}" />
-                            ${value}
-                        </label>
-                    `;
-            newPerson.innerHTML = `
-                        <div id="person-${value}">
-                            <input class="form-check-input h4" type="checkbox" value="${value}" checked="${value}" name="SelectedPeople" id="${value}" />
-                            <label class="form-check-label h4" for="${value}">
-                                ${value}
-                            </label>
-                            <button id="btnDeletePerson" type="submit" class="btn btn-outline-danger btn-sm" onclick="addDelete('person-${value}');">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    `;
+			const arrayNames = value.split(",");
 
-            var selectedPeople = document.querySelectorAll('input[name="SelectedPeople"]');
-            var selectedPeopleNames = Array.from(selectedPeople).map(function (person) {
-                return person.value;
-            });
+			arrayNames.forEach(addAPerson);
 
-            selectedPeopleNames.push(value); // Add newPerson to selectedPeopleNames
+			personsNameElement.value = "";
+		}
 
-            // Set the value of the hidden input field to the list of people's names
-            document.querySelector('input[name="AllPeopleNames"]').value = selectedPeopleNames.join(',');
+		function addAPerson(value) {
+			var newPerson = document.createElement("div");
+			newPerson.className = "checkbox";
+			newPerson.innerHTML = `
+												<label>
+													<input type="checkbox" value="${value}" checked="true" name="SelectedPeople" id="${value}" />
+													${value}
+												</label>
+											`;
+			newPerson.innerHTML = `
+												<div id="person-${value}">
+													<input class="form-check-input h4" type="checkbox" value="${value}" checked="${value}" name="SelectedPeople" id="${value}" />
+													<label class="form-check-label h4" for="${value}">
+														${value}
+													</label>
+													<button id="btnDeletePerson" type="submit" class="btn btn-outline-danger btn-sm" onclick="addDelete('person-${value}');">
+														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+															<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+															<path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+														</svg>
+													</button>
+												</div>
+											`;
 
-            document.getElementById("people").appendChild(newPerson);
+			var selectedPeople = document.querySelectorAll('input[name="SelectedPeople"]');
+			var selectedPeopleNames = Array.from(selectedPeople).map(function (person) {
+				return person.value;
+			});
 
-            // Remove the 'no-people' div when adding a person
-            var noPeopleDiv = document.getElementById("no-people");
-            if (noPeopleDiv) {
-                noPeopleDiv.remove();
-            }
+			selectedPeopleNames.push(value); // Add newPerson to selectedPeopleNames
 
-        }
+			// Set the value of the hidden input field to the list of people's names
+			document.querySelector('input[name="AllPeopleNames"]').value = selectedPeopleNames.join(',');
 
-        function addDelete(elementId) {
-            event.preventDefault(); // Prevent the default form submission
+			document.getElementById("people").appendChild(newPerson);
 
-            var elementCheckbox = document.getElementById(elementId);
-            if (elementCheckbox) {
-                elementCheckbox.remove();
+			// Remove the 'no-people' div when adding a person
+			var noPeopleDiv = document.getElementById("no-people");
+			if (noPeopleDiv) {
+				noPeopleDiv.remove();
+			}
 
-                var selectedPeople = document.querySelectorAll('input[name="SelectedPeople"]');
-                var selectedPeopleNames = Array.from(selectedPeople).map(function (person) {
-                    return person.value;
-                });
-                document.querySelector('input[name="AllPeopleNames"]').value = selectedPeopleNames.join(',');
-            }
+			// Remove the 'erros' div when adding a person
+			var errorsDiv = document.getElementById("errors");
+			if (noPeopleDiv) {
+				errorsDiv.remove();
+			}
+		}
 
-        }
-    </script>
+		function addDelete(elementId) {
+			event.preventDefault(); // Prevent the default form submission
+
+			var elementCheckbox = document.getElementById(elementId);
+			if (elementCheckbox) {
+				elementCheckbox.remove();
+
+				var selectedPeople = document.querySelectorAll('input[name="SelectedPeople"]');
+				var selectedPeopleNames = Array.from(selectedPeople).map(function (person) {
+					return person.value;
+				});
+				document.querySelector('input[name="AllPeopleNames"]').value = selectedPeopleNames.join(',');
+			}
+
+		}
+	</script>
 }
 
 <form name="Home" asp-action="Start" asp-controller="Home" method="post" enctype="multipart/form-data">
-    <div class="container">
-        <!-- Hidden input field to store the list of people's names -->
-        <input type="hidden" name="AllPeopleNames" value="@string.Join(',', Model.People.Select(x => x.Name))" />
-        <div class="row mt-2">
-            <div class="col">
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach (var modelState in ViewData.ModelState)
-                            {
-                                foreach (var error in modelState.Value.Errors)
-                                {
-                                    <li>
-                                        <pre id="@modelState.Key">@error.ErrorMessage</pre>
-                                    </li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                }
-            </div>
-        </div>
-        <div id="people" class="row">
-            <div class="col">
-                @if (Model.People.Count == 0)
-                {
-                    <div id="no-people" class="alert alert-danger" role="alert">
-                        No one added yet!
-                    </div>
-                }
-                else
-                {
-                    @foreach (var item in Model.People)
-                    {
-                        <div id="person-@item.Name">
-                            <input class="form-check-input h4" type="checkbox" value="@item.Name" checked="@item.IsSelected" name="SelectedPeople" id="@item.Name" />
-                            <label class="form-check-label h4" for="@item.Name">
-                                @Html.Raw(@item.Name)
-                            </label>
-                            <button id="btnDeletePerson" type="submit" class="btn btn-outline-danger btn-sm" onclick="addDelete('person-@item.Name');">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    }
-                }
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col">
-                <button id="btnAddPerson" type="submit" class="btn btn-primary" onclick="addPerson();">
-                    Add Person
-                </button>
-                <button id="btnStart" type="submit" class="btn btn-success" onclick="start();">
-                    <span id="spnStart" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
-                    <label id="lblStart">Start</label>
-                </button>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<!-- Hidden input field to store the list of people's names -->
+		<input type="hidden" name="AllPeopleNames" value="@string.Join(',', Model.People.Select(x => x.Name))" />
+		<div id="errors" class="row mt-2">
+			<div class="col">
+				@if (!ViewData.ModelState.IsValid)
+				{
+					<div class="alert alert-danger">
+						<ul>
+							@foreach (var modelState in ViewData.ModelState)
+							{
+								foreach (var error in modelState.Value.Errors)
+								{
+									<li>
+										<pre id="@modelState.Key">@error.ErrorMessage</pre>
+									</li>
+								}
+							}
+						</ul>
+					</div>
+				}
+			</div>
+		</div>
+		<div id="people" class="row">
+			<div class="col">
+				@if (Model.People.Count == 0)
+				{
+					<div id="no-people" class="alert alert-danger" role="alert">
+						No one added yet!
+					</div>
+				}
+				else
+				{
+					@foreach (var item in Model.People)
+					{
+						<div id="person-@item.Name">
+							<input class="form-check-input h4" type="checkbox" value="@item.Name" checked="@item.IsSelected" name="SelectedPeople" id="@item.Name" />
+							<label class="form-check-label h4" for="@item.Name">
+								@Html.Raw(@item.Name)
+							</label>
+							<button id="btnDeletePerson" type="submit" class="btn btn-outline-danger btn-sm" onclick="addDelete('person-@item.Name');">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+									<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+									<path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+								</svg>
+							</button>
+						</div>
+					}
+				}
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="container">
+				<div class="row">
+					<div class="col-5">
+						<div class="input-group mb-3">
+							<input id="personsName" type="text" class="form-control" placeholder="Enter persons name (comma-seperated add eg. Max,Lee)">
+							<div class="input-group-append">
+								<buttonn id="btnAddPerson" type="submit" class="btn btn-primary" onclick="addPerson();">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+										<path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+										<path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+									</svg>
+								</buttonn>
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<button id="btnStart" type="submit" class="btn btn-success" onclick="start();">
+							<span id="spnStart" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+							<a id="lblStart">
+								Start
+							</a>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </form>
