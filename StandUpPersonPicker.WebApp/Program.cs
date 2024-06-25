@@ -1,10 +1,15 @@
 using RestSharp;
 using StandUpPersonPicker.Core.Implementations;
 using StandUpPersonPicker.Core.Interfaces;
+using StandUpPersonPicker.Domain.Models;
+using StandUpPersonPicker.Infrastructure.Dals.Implementations;
+using StandUpPersonPicker.Infrastructure.Dals.Interfaces;
+using StandUpPersonPicker.Infrastructure.Wrappers.Implementations;
+using StandUpPersonPicker.Infrastructure.Wrappers.Interfaces;
 
 namespace StandUpPersonPicker.WebApp
 {
-    public class Program
+	public class Program
     {
         public static void Main(string[] args)
         {
@@ -13,7 +18,9 @@ namespace StandUpPersonPicker.WebApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddSingleton<IRestClient, RestClient>(_ => new RestClient("https://rickandmortyapi.com/api/"));
+            builder.Services.AddSingleton<ISQLiteWrapper<StatisticDao>, SQLiteWrapper<StatisticDao>>();
+            builder.Services.AddSingleton<IStatisticDal, StatisticDal>();
+			builder.Services.AddSingleton<IRestClient, RestClient>(_ => new RestClient("https://rickandmortyapi.com/api/"));
             builder.Services.AddSingleton<ICharacterBl, CharacterBl>();
             builder.Services.AddSingleton<IPersonBl, PersonBl>();
 
@@ -26,8 +33,10 @@ namespace StandUpPersonPicker.WebApp
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            app.Services.GetRequiredService<IStatisticDal>();
+
+			// Configure the HTTP request pipeline.
+			if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model StandUpPersonPicker.Domain.Models.LayoutModel
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -36,7 +38,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - Stand Up Person Picker - <a href="https://github.com/tmathura/StandUpPersonPicker" target="_blank">GitHub</a>
+            &copy; 2024 - Stand Up Person Picker - <a href="https://github.com/tmathura/StandUpPersonPicker" target="_blank">GitHub</a> - <strong>Sessions so far: @Model.SessionsSoFar</strong>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

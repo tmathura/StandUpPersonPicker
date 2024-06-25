@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StandUpPersonPicker.Core.Interfaces;
 using StandUpPersonPicker.Domain.Models;
+using StandUpPersonPicker.Infrastructure.Dals.Interfaces;
 using StandUpPersonPicker.WebApp.Models;
 using System.Diagnostics;
 
 namespace StandUpPersonPicker.WebApp.Controllers
 {
-    public class HomeController : Controller
+	public class HomeController : Controller
     {
         private readonly IPersonBl _personBl;
+        private readonly IStatisticDal _statisticDal;
 
-        public HomeController(IPersonBl personBl)
+        public HomeController(IPersonBl personBl, IStatisticDal statisticDal)
         {
             _personBl = personBl;
-        }
+            _statisticDal = statisticDal;
+		}
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var viewModel = new HomeViewModel
             {
@@ -32,9 +35,11 @@ namespace StandUpPersonPicker.WebApp.Controllers
                 {
                     viewModel.People.Add(new Person { Name = person, IsSelected = true});
                 }
-            }
+			}
 
-            return View(viewModel);
+            var sessions = await _statisticDal.Read();
+
+			return View(new LayoutModel<HomeViewModel>(viewModel, sessions.Count));
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -49,9 +54,11 @@ namespace StandUpPersonPicker.WebApp.Controllers
             if (viewModel.SelectedPeople == null || viewModel.SelectedPeople.Count == 0)
             {
                 ModelState.AddModelError("people-count-error", "No one added to start the stand up!");
-                
-                return View("Index", viewModel);
-            }
+
+				var sessions = await _statisticDal.Read();
+
+				return View("Index", new LayoutModel<HomeViewModel>(viewModel, sessions.Count));
+			}
 
             // Save SelectedPeople to cookies
             var cookieOptions = new CookieOptions
@@ -75,10 +82,12 @@ namespace StandUpPersonPicker.WebApp.Controllers
                     Name = keyValuePair.Value,
                     CharacterName = keyValuePair.Key.Name,
                     CharacterImageUrl = keyValuePair.Key.Image
-                });
-            }
-            
-            return View("StandUp", model);
+				});
+			}
+
+            var latestSessions = await _statisticDal.Read();
+
+			return View("StandUp", new LayoutModel<StandUpViewModel>(model, latestSessions.Count));
         }
     }
 }

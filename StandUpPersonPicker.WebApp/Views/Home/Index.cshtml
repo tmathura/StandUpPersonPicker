@@ -1,4 +1,4 @@
-﻿@model StandUpPersonPicker.Domain.Models.HomeViewModel
+﻿@model StandUpPersonPicker.Domain.Models.LayoutModel<StandUpPersonPicker.Domain.Models.HomeViewModel>
 
 @{
 	ViewData["Title"] = "Home";
@@ -109,7 +109,7 @@
 <form name="Home" asp-action="Start" asp-controller="Home" method="post" enctype="multipart/form-data">
 	<div class="container">
 		<!-- Hidden input field to store the list of people's names -->
-		<input type="hidden" name="AllPeopleNames" value="@string.Join(',', Model.People.Select(x => x.Name))" />
+		<input type="hidden" name="AllPeopleNames" value="@string.Join(',', Model.PageModel.People.Select(x => x.Name))" />
 		<div id="errors" class="row mt-2">
 			<div class="col">
 				@if (!ViewData.ModelState.IsValid)
@@ -132,7 +132,7 @@
 		</div>
 		<div id="people" class="row">
 			<div class="col">
-				@if (Model.People.Count == 0)
+				@if (Model.PageModel.People.Count == 0)
 				{
 					<div id="no-people" class="alert alert-danger" role="alert">
 						No one added yet!
@@ -140,7 +140,7 @@
 				}
 				else
 				{
-					@foreach (var item in Model.People)
+					@foreach (var item in Model.PageModel.People)
 					{
 						<div id="person-@item.Name">
 							<input class="form-check-input h4" type="checkbox" value="@item.Name" checked="@item.IsSelected" name="SelectedPeople" id="@item.Name" />

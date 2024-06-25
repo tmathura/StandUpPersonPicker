@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandUpPersonPicker.Domain"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandUpPersonPicker.Console.WinFormsApp", "StandUpPersonPicker.Console.WinFormsApp\StandUpPersonPicker.Console.WinFormsApp.csproj", "{158DB3F2-C0CE-43B0-8AD6-377E80C1DA73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandUpPersonPicker.WebApp", "StandUpPersonPicker.WebApp\StandUpPersonPicker.WebApp.csproj", "{5E1AE027-AFF6-43D1-90B9-91ADE4B16CC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandUpPersonPicker.WebApp", "StandUpPersonPicker.WebApp\StandUpPersonPicker.WebApp.csproj", "{5E1AE027-AFF6-43D1-90B9-91ADE4B16CC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandUpPersonPicker.Infrastructure", "StandUpPersonPicker.Infrastructure\StandUpPersonPicker.Infrastructure.csproj", "{1065D3A9-4ED0-4468-B309-2526958CD677}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5E1AE027-AFF6-43D1-90B9-91ADE4B16CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E1AE027-AFF6-43D1-90B9-91ADE4B16CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E1AE027-AFF6-43D1-90B9-91ADE4B16CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1065D3A9-4ED0-4468-B309-2526958CD677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1065D3A9-4ED0-4468-B309-2526958CD677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1065D3A9-4ED0-4468-B309-2526958CD677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1065D3A9-4ED0-4468-B309-2526958CD677}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

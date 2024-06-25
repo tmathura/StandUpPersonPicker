@@ -1,20 +1,23 @@
 ﻿using StandUpPersonPicker.Core.Interfaces;
 using StandUpPersonPicker.Domain.Models;
 using StandUpPersonPicker.Domain.Models.RickAndMorty;
+using StandUpPersonPicker.Infrastructure.Dals.Interfaces;
 
 namespace StandUpPersonPicker.Core.Implementations
 {
     public class PersonBl : IPersonBl
     {
         private readonly ICharacterBl _characterBl;
-        private readonly Random _random = new();
+        private readonly IStatisticDal _statisticDal;
+		private readonly Random _random = new();
 
         private Dictionary<Character, string> CharacterPersonPairs { get; set; } = new();
 
-        public PersonBl(ICharacterBl characterBl)
+        public PersonBl(ICharacterBl characterBl, IStatisticDal statisticDal)
         {
             _characterBl = characterBl;
-        }
+            _statisticDal = statisticDal;
+		}
         
         public async Task<Dictionary<Character, string>> CreateCharacterPersonPairs(List<string> personNames)
         {
@@ -33,7 +36,14 @@ namespace StandUpPersonPicker.Core.Implementations
 
             CharacterPersonPairs = characterPersonPairs;
 
-            return characterPersonPairs;
+            var statistic = new StatisticDao
+            {
+                TotalNumberOfPeople = personNames.Count,
+                SessionDateTime = DateTimeOffset.Now
+            };
+            await _statisticDal.Create(statistic);
+            
+			return characterPersonPairs;
         }
 
         public PersonResponse GetPersonByIndex(int index)
